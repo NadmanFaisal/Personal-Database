@@ -23,7 +23,7 @@ MetaCommandResult doMetaCommand(INPUTBUFFER *node, TABLE *table) {
     if(strcmp(node->buffer, ".exit") == 0) {
         closeDB(table);
         exit(0);
-    } else if(strcmo(node->buffer, ".constants") == 0) {
+    } else if(strcmp(node->buffer, ".constants") == 0) {
         printf("Constants:\n");
         printConstants();
         return META_COMMAND_SUCCESS;
