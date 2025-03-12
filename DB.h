@@ -1,6 +1,8 @@
 #ifndef DB_H
 #define DB__H
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include "Table.h"
