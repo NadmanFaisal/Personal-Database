@@ -53,7 +53,7 @@ ExecuteResult executeInsert(STATEMENT *statement, TABLE *table) {
     }
 
     ROW *rowToInsert = &(statement->rowToInsert);
-    CURSOR *cursor = endTable(table);
+    CURSOR *cursor = tableEnd(table);
 
     serialize_row(rowToInsert, cursorValue(cursor));
     table->numRows += 1;
@@ -64,11 +64,15 @@ ExecuteResult executeInsert(STATEMENT *statement, TABLE *table) {
 }
 
 ExecuteResult executeSelect(STATEMENT *statement, TABLE *table) {
+    CURSOR *cursor = tableStart(table);
     ROW row;
-    for(uint32_t i = 0; i < table->numRows; i++) {
-        deserialize_row(rowSlot(table, i), &row);
+    while(!(cursor->endOfTable)) {
+        deserialize_row(cursorValue(cursor), &row);
         printRow(&row);
+        cursorAdvance(cursor);
     }
+
+    free(cursor);
 
     return EXECUTE_SUCCESS;
 }

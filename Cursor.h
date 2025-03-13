@@ -1,3 +1,6 @@
+#ifndef CURSOR_H
+#define CURSOR_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -11,3 +14,9 @@ typedef struct {
     bool endOfTable;
 } CURSOR;
 
+CURSOR *tableStart(TABLE *table);
+CURSOR *tableEnd(TABLE *table);
+void *cursorValue(CURSOR* cursor);
+void cursorAdvance(CURSOR *cursor);
+
+#endif
