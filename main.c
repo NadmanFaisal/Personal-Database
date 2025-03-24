@@ -53,7 +53,7 @@ PrepareResults prepareStatements(INPUTBUFFER *node, STATEMENT *statement) {
         return PREPARE_SUCCESS;
     }
 
-    if(strcmp(node->buffer, "select") == 0) {
+    if(strncmp(node->buffer, "select", 6) == 0) {
         statement->type = STATEMENT_SELECT;
         return PREPARE_SUCCESS;
     }
