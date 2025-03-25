@@ -9,6 +9,8 @@
 
 #include "InputBuffer.h"
 #include "Row.h"
+#include "Table.h"
+#include "Row.h"
 
 #define MAX_CHARS 256
 
@@ -28,7 +30,14 @@ typedef enum {
     PREPARE_UNRECOGNIZED_STATEMENT,
 } PrepareResults;
 
+typedef enum {
+    EXECUTE_SUCCESS,
+    EXECUTE_TABLE_FULL
+} ExecuteResult;
+
 PrepareResults prepareStatements(INPUTBUFFER *node, STATEMENT *statement);
-void executeStatement(STATEMENT *statement);
+ExecuteResult executeInsert(STATEMENT *statement, TABLE *table);
+ExecuteResult executeSelect(STATEMENT *statement, TABLE *table);
+ExecuteResult executeStatement(STATEMENT *statement, TABLE *table);
 
 #endif

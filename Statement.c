@@ -6,6 +6,8 @@
 
 #include "InputBuffer.h"
 #include "Statement.h"
+#include "Table.h"
+#include "Row.h"
 
 #define MAX_CHARS 256
 #define COLUMN_EMAIL_SIZE 255
@@ -34,13 +36,33 @@ PrepareResults prepareStatements(INPUTBUFFER *node, STATEMENT *statement) {
     return PREPARE_UNRECOGNIZED_STATEMENT;
 }
 
-void executeStatement(STATEMENT *statement) {
+ExecuteResult executeInsert(STATEMENT *statement, TABLE *table) {
+    if(table->numRows >= TABLE_MAX_ROWS) {
+        return EXECUTE_TABLE_FULL;
+    }
+
+    ROW *rowToInsert = &(statement->rowToInsert);
+    serialize_row(rowToInsert, rowSlot(table, table->numRows));
+    table->numRows += 1;
+
+    return EXECUTE_SUCCESS;
+}
+
+ExecuteResult executeSelect(STATEMENT *statement, TABLE *table) {
+    ROW row;
+    for(uint32_t i = 0; i < table->numRows; i++) {
+        deserialize_row(rowSlot(table, i), &row);
+        printRow(&row);
+    }
+
+    return EXECUTE_SUCCESS;
+}
+
+ExecuteResult executeStatement(STATEMENT *statement, TABLE *table) {
     switch (statement->type) {
-    case STATEMENT_INSERT:
-        printf("INSERT HAS BEEN REQUESTED\n");
-        break;
-    case STATEMENT_SELECT:
-        printf("SELECT HAS BEEN REQUESTED\n");
-        break;
+        case STATEMENT_INSERT:
+            return executeInsert(statement, table);
+        case STATEMENT_SELECT:
+            return executeSelect(statement, table);
     }
 }
