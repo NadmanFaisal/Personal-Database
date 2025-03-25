@@ -2,28 +2,27 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #include "InputBuffer.h"
+#include "Statement.h"
 
 #define MAX_CHARS 256
-
-typedef enum {
-    STATEMENT_INSERT,
-    STATEMENT_SELECT,
-} StatementType;
-
-typedef struct {
-    StatementType type;
-} STATEMENT;
-
-typedef enum {
-    PREPARE_SUCCESS,
-    PREPARE_UNRECOGNIZED_STATEMENT,
-} PrepareResults;
+#define COLUMN_EMAIL_SIZE 255
+#define COLUMN_USERNAME_SIZE 32
 
 PrepareResults prepareStatements(INPUTBUFFER *node, STATEMENT *statement) {
     if(strncmp(node->buffer, "insert", 6) == 0) {
         statement->type = STATEMENT_INSERT;
+        int argsPreped = sscanf(node->buffer, "insert %d %s %s",
+            &(statement->rowToInsert.id),
+            statement->rowToInsert.username,
+            statement->rowToInsert.email
+        );
+
+        if(argsPreped < 3) {
+            return PREPARE_SYNTAX_ERROR;
+        }
         return PREPARE_SUCCESS;
     }
 

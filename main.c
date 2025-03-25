@@ -29,13 +29,15 @@ int main(int argc, char **argv) {
             }
         }
 
-        STATEMENT *statement;
+        STATEMENT *statement = (STATEMENT *)malloc(sizeof(STATEMENT));
         switch (prepareStatements(buffer, statement)) {
         case PREPARE_SUCCESS:
             executeStatement(statement);
             break;
         case PREPARE_UNRECOGNIZED_STATEMENT:
             printf("Unrecognized keyword at the start of '%s'\n", buffer->buffer);
+        case PREPARE_SYNTAX_ERROR:
+            printf("Unrecognized schema '%s'\n", buffer->buffer);
         default:
             break;
         }
