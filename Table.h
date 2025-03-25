@@ -16,5 +16,7 @@ typedef struct {
 } TABLE;
 
 void *rowSlot(TABLE *table, uint32_t rowNum);
+TABLE *newTable();
+void freeTable(TABLE *table);
 
 #endif
