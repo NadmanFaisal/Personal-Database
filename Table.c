@@ -8,7 +8,8 @@ void *rowSlot(TABLE *table, uint32_t rowNum) {
     uint32_t pageNum = rowNum / ROWS_PER_PAGE;
     void *page = table->pages[pageNum];
     if(page == NULL) {
-        page = table->pages[pageNum];
+        page = malloc(PAGE_SIZE);
+        table->pages[pageNum] = page;
     }
 
     uint32_t rowOffset = rowNum % ROWS_PER_PAGE;

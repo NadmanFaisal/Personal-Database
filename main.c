@@ -4,8 +4,9 @@
 #include <stdbool.h>
 
 #include "InputBuffer.h"
-#include "Statement.h"
 #include "MetaCommand.h"
+#include "Row.h"
+#include "Statement.h"
 #include "Table.h"
 
 #define MAX_CHARS 256
@@ -31,8 +32,8 @@ int main(int argc, char **argv) {
             }
         }
 
-        STATEMENT *statement = (STATEMENT *)malloc(sizeof(STATEMENT));
-        switch (prepareStatements(buffer, statement)) {
+        STATEMENT statement;
+        switch (prepareStatements(buffer, &statement)) {
             case PREPARE_SUCCESS:
                 break;
             case PREPARE_UNRECOGNIZED_STATEMENT:
@@ -43,7 +44,7 @@ int main(int argc, char **argv) {
                 continue;
         }
 
-        switch(executeStatement(statement, table)) {
+        switch(executeStatement(&statement, table)) {
             case EXECUTE_SUCCESS:
                 printf("Executed!\n");
                 break;
@@ -51,6 +52,7 @@ int main(int argc, char **argv) {
                 printf("Error: Table is full.\n");
                 break;
         }
+    }
     
     return 0;
 }

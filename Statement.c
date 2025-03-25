@@ -42,7 +42,8 @@ ExecuteResult executeInsert(STATEMENT *statement, TABLE *table) {
     }
 
     ROW *rowToInsert = &(statement->rowToInsert);
-    serialize_row(rowToInsert, rowSlot(table, table->numRows));
+    void *destination = rowSlot(table, table->numRows);
+    serialize_row(rowToInsert, destination);
     table->numRows += 1;
 
     return EXECUTE_SUCCESS;
