@@ -6,6 +6,7 @@
 #include "InputBuffer.h"
 #include "Statement.h"
 #include "MetaCommand.h"
+#include "Table.h"
 
 #define MAX_CHARS 256
 
@@ -14,6 +15,7 @@ void printPrompt(void) {
 }
 
 int main(int argc, char **argv) {
+    TABLE *table = newTable();
     INPUTBUFFER *buffer = createBuffer();
     while(true) {
         printPrompt();
@@ -31,18 +33,24 @@ int main(int argc, char **argv) {
 
         STATEMENT *statement = (STATEMENT *)malloc(sizeof(STATEMENT));
         switch (prepareStatements(buffer, statement)) {
-        case PREPARE_SUCCESS:
-            executeStatement(statement);
-            break;
-        case PREPARE_UNRECOGNIZED_STATEMENT:
-            printf("Unrecognized keyword at the start of '%s'\n", buffer->buffer);
-            break;
-        case PREPARE_SYNTAX_ERROR:
-            printf("Unrecognized schema '%s'\n", buffer->buffer);
-        default:
-            break;
+            case PREPARE_SUCCESS:
+                break;
+            case PREPARE_UNRECOGNIZED_STATEMENT:
+                printf("Unrecognized keyword at the start of '%s'\n", buffer->buffer);
+                continue;
+            case PREPARE_SYNTAX_ERROR:
+                printf("Syntax error. Could not parse statement '%s'\n", buffer->buffer);
+                continue;
         }
-    }
+
+        switch(executeStatement(statement, table)) {
+            case EXECUTE_SUCCESS:
+                printf("Executed!\n");
+                break;
+            case EXECUTE_TABLE_FULL:
+                printf("Error: Table is full.\n");
+                break;
+        }
     
     return 0;
 }
