@@ -16,3 +16,7 @@ void deserialize_row(void *source, ROW *destination) {
     memcpy(&(destination->username), source + USERNAME_OFFSET, USERNAME_SIZE);
     memcpy(&(destination->email), source + EMAIL_OFFSET, EMAIL_SIZE);
 }
+
+void printRow(ROW *row) {
+    printf("(%d, %s, %s)\n", row->id, row->username, row->email);
+}

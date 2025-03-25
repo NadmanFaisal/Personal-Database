@@ -29,5 +29,6 @@ static const uint32_t ROW_SIZE = ID_SIZE + USERNAME_SIZE + EMAIL_SIZE;
 
 void serialize_row(ROW *row, void *destination);
 void deserialize_row(void *source, ROW *destination);
+void printRow(ROW *row);
 
 #endif
