@@ -36,6 +36,7 @@ int main(int argc, char **argv) {
             break;
         case PREPARE_UNRECOGNIZED_STATEMENT:
             printf("Unrecognized keyword at the start of '%s'\n", buffer->buffer);
+            break;
         case PREPARE_SYNTAX_ERROR:
             printf("Unrecognized schema '%s'\n", buffer->buffer);
         default:

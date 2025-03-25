@@ -33,7 +33,4 @@ void readInput(INPUTBUFFER *node) {
     string[strlen(string) - 1] = '\0';
     strcpy(node->buffer, string);
     node->inputLength = strlen(string);
-
-    printf("The string in readinput is: %s\n", node->buffer);
-
 }
