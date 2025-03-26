@@ -6,8 +6,6 @@
 #include "InputBuffer.h"
 #include "MetaCommand.h"
 
-#define MAX_CHARS 256
-
 MetaCommandResult doMetaCommand(INPUTBUFFER *node) {
     if(strcmp(node->buffer, ".exit") == 0) {
         exit(0);

@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 
-#define MAX_CHARS 256
 #define COLUMN_EMAIL_SIZE 255
 #define COLUMN_USERNAME_SIZE 32
 
@@ -12,8 +11,8 @@
 
 typedef struct {
     uint32_t id;
-    char username[COLUMN_USERNAME_SIZE];
-    char email[COLUMN_EMAIL_SIZE];
+    char username[COLUMN_USERNAME_SIZE + 1];
+    char email[COLUMN_EMAIL_SIZE + 1];
 } ROW;
 
 

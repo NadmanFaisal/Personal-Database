@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Compile the program into executable file
+gcc main.c InputBuffer.c MetaCommand.c Row.c Statement.c Table.c -o mydb
+
+
 # Test 1: Test whether insertion and retrieval is working as expected
 test1=$(./mydb <<EOF
 insert 1 wowza people@shabang.com
@@ -44,5 +48,32 @@ else
   echo "Test 2 FAILED"
   echo "Expected: db > Error: Table is full."
   echo "Actual: $last_message"
+  exit 1
+fi
+
+# Test 3: Test edge case for max string length of email and username (username: 32 chars, email: 255 chars)
+long_username=$(printf 'a%.0s' {1..32})
+long_email=$(printf 'a%.0s' {1..255})
+
+test3=$(./mydb <<EOF
+insert 1 $long_username $long_email
+select
+.exit
+EOF
+)
+
+test3_expected_output="db > Executed!
+db > (1, $long_username, $long_email)
+Executed!
+db > "
+
+if [ "$test3" == "$test3_expected_output" ]; then
+  echo "Test 3 PASSED"
+else
+  echo "Test 3 FAILED"
+   echo "Expected:"
+   echo "$test3_expected_output"
+  echo "Actual:"
+  echo "$test3"
   exit 1
 fi

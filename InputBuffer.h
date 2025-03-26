@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-#define MAX_CHARS 256
+#define MAX_CHARS 1024
 
 typedef struct {
     char *buffer;

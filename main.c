@@ -9,7 +9,6 @@
 #include "Statement.h"
 #include "Table.h"
 
-#define MAX_CHARS 256
 
 void printPrompt(void) {
     printf("db > ");

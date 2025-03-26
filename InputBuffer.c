@@ -5,7 +5,6 @@
 
 #include "InputBuffer.h"
 
-#define MAX_CHARS 256
 
 INPUTBUFFER *createBuffer() {
     INPUTBUFFER *node = (INPUTBUFFER *) malloc(sizeof(INPUTBUFFER));

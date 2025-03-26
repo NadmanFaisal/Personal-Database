@@ -12,7 +12,6 @@
 #include "Table.h"
 #include "Row.h"
 
-#define MAX_CHARS 256
 
 typedef enum {
     STATEMENT_INSERT,
