@@ -77,3 +77,29 @@ else
   echo "$test3"
   exit 1
 fi
+
+#Test 4: Not allow insertion for fields greater than max chars allowed
+long_username=$(printf 'a%.0s' {1..33})   # 33 chars, 1 over the limit
+long_email=$(printf 'a%.0s' {1..256})     # 256 chars, 1 over the limit
+
+test4=$(./mydb <<EOF
+insert 1 $long_username $long_email
+select
+.exit
+EOF
+)
+
+test4_expected_output="db > String is too long.
+db > Executed!
+db > "
+
+if [ "$test4" == "$test4_expected_output" ]; then
+  echo "Test 4 PASSED"
+else
+  echo "Test 4 FAILED"
+  echo "Expected:"
+  echo "$test4_expected_output"
+  echo "Actual:"
+  echo "$test4"
+  exit 1
+fi
