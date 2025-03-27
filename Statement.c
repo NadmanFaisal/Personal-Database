@@ -12,19 +12,37 @@
 #define COLUMN_EMAIL_SIZE 255
 #define COLUMN_USERNAME_SIZE 32
 
+PrepareResults prepareInsert(INPUTBUFFER *buffer, STATEMENT *statement) {
+    statement->type = STATEMENT_INSERT;
+
+    char *keyword = strtok(buffer->buffer, " ");
+    char *idString = strtok(NULL, " ");
+    char *username = strtok(NULL, " ");
+    char *email = strtok(NULL, " ");
+
+    if(idString == NULL || username == NULL || email == NULL) {
+        return PREPARE_SYNTAX_ERROR;
+    }
+
+    int *id = atoi(idString);
+    if(strlen(username) > COLUMN_USERNAME_SIZE) {
+        return PREPARE_STRING_TOO_LONG;
+    }
+
+    if(strlen(email) > COLUMN_EMAIL_SIZE) {
+        return PREPARE_STRING_TOO_LONG;
+    }
+
+    statement->rowToInsert.id = id;
+    strcpy(statement->rowToInsert.username, username);
+    strcpy(statement->rowToInsert.email, email);
+
+    return PREPARE_SUCCESS;
+}
+
 PrepareResults prepareStatements(INPUTBUFFER *node, STATEMENT *statement) {
     if(strncmp(node->buffer, "insert", 6) == 0) {
-        statement->type = STATEMENT_INSERT;
-        int argsPreped = sscanf(node->buffer, "insert %d %s %s",
-            &(statement->rowToInsert.id),
-            statement->rowToInsert.username,
-            statement->rowToInsert.email
-        );
-
-        if(argsPreped < 3) {
-            return PREPARE_SYNTAX_ERROR;
-        }
-        return PREPARE_SUCCESS;
+        return prepareInsert(node, statement);
     }
 
     if(strncmp(node->buffer, "select", 6) == 0) {
