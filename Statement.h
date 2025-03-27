@@ -28,6 +28,7 @@ typedef enum {
     PREPARE_SYNTAX_ERROR,
     PREPARE_UNRECOGNIZED_STATEMENT,
     PREPARE_STRING_TOO_LONG,
+    PREPARE_NEGATIVE_ID,
 } PrepareResults;
 
 typedef enum {

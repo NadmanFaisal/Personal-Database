@@ -103,3 +103,26 @@ else
   echo "$test4"
   exit 1
 fi
+
+#Test 5: Handle negative ID values
+test5=$(./mydb <<EOF
+insert -1 foo bar@gmail.com
+select
+.exit
+EOF
+)
+
+test5_expected_output="db > ID must be a positive integer.
+db > Executed!
+db > "
+
+if [ "$test5" == "$test5_expected_output" ]; then
+  echo "Test 5 PASSED"
+else
+  echo "Test 5 FAILED"
+  echo "Expected:"
+  echo "$test5_expected_output"
+  echo "Actual:"
+  echo "$test5"
+  exit 1
+fi

@@ -25,6 +25,9 @@ PrepareResults prepareInsert(INPUTBUFFER *buffer, STATEMENT *statement) {
     }
 
     int id = atoi(idString);
+    if(id < 0) {
+        return PREPARE_NEGATIVE_ID;
+    }
     if(strlen(username) > COLUMN_USERNAME_SIZE) {
         return PREPARE_STRING_TOO_LONG;
     }
