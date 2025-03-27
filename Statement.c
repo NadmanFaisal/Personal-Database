@@ -24,7 +24,7 @@ PrepareResults prepareInsert(INPUTBUFFER *buffer, STATEMENT *statement) {
         return PREPARE_SYNTAX_ERROR;
     }
 
-    int *id = atoi(idString);
+    int id = atoi(idString);
     if(strlen(username) > COLUMN_USERNAME_SIZE) {
         return PREPARE_STRING_TOO_LONG;
     }
