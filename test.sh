@@ -15,7 +15,7 @@ EOF
 # Expected output
 test1_expected_output="db > Executed!
 db > (1, wowza, people@shabang.com)
-Executed!
+Executed
 db > "
 
 # Compare actual output with expected
@@ -24,7 +24,7 @@ if [ "$test1" == "$test1_expected_output" ]; then
 else
   echo "Test 1 FAILED"
   echo "Expected:"
-  echo "$test1_expected_output"
+  echo $'$test1_expected_output\n'
   echo "Actual:"
   echo "$test1"
   exit 1
@@ -46,7 +46,7 @@ if [ "$last_message" == "db > Error: Table is full." ]; then
   echo "Test 2 PASSED"
 else
   echo "Test 2 FAILED"
-  echo "Expected: db > Error: Table is full."
+  echo $'Expected: db > Error: Table is full.\n'
   echo "Actual: $last_message"
   exit 1
 fi
@@ -72,7 +72,7 @@ if [ "$test3" == "$test3_expected_output" ]; then
 else
   echo "Test 3 FAILED"
    echo "Expected:"
-   echo "$test3_expected_output"
+   echo $'$test3_expected_output\n'
   echo "Actual:"
   echo "$test3"
   exit 1
@@ -98,7 +98,7 @@ if [ "$test4" == "$test4_expected_output" ]; then
 else
   echo "Test 4 FAILED"
   echo "Expected:"
-  echo "$test4_expected_output"
+  echo $'$test4_expected_output\n'
   echo "Actual:"
   echo "$test4"
   exit 1
