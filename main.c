@@ -8,6 +8,7 @@
 #include "Row.h"
 #include "Statement.h"
 #include "Table.h"
+#include "DB.h"
 
 
 void printPrompt(void) {
@@ -15,14 +16,20 @@ void printPrompt(void) {
 }
 
 int main(int argc, char **argv) {
-    TABLE *table = newTable();
+    if(argc < 2) {
+        printf("Must supply a database filename.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    char *fileName = argv[1];
+    TABLE *table = openDB(fileName);
     INPUTBUFFER *buffer = createBuffer();
     while(true) {
         printPrompt();
         readInput(buffer);
         
         if(buffer->buffer[0] == '.') {
-            switch (doMetaCommand(buffer)) {
+            switch (doMetaCommand(buffer, table)) {
                 case (META_COMMAND_SUCCESS):
                     continue;
                 case (META_COMMAND_UNRECOGNIZED_COMMAND):
