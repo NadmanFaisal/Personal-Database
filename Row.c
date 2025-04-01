@@ -7,8 +7,8 @@
 
 void serialize_row(ROW *row, void *destination) {
     memcpy(destination + ID_OFFSET, &(row->id), ID_SIZE);
-    memcpy(destination + USERNAME_OFFSET, &(row->username), USERNAME_SIZE);
-    memcpy(destination + EMAIL_OFFSET, &(row->email), EMAIL_SIZE);
+    strncpy(destination + USERNAME_OFFSET, row->username, USERNAME_SIZE);
+    strncpy(destination + EMAIL_OFFSET, row->email, EMAIL_SIZE);
 }
 
 void deserialize_row(void *source, ROW *destination) {
