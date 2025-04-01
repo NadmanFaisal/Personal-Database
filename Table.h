@@ -2,21 +2,17 @@
 #define TABLE_H
 
 #include <stdint.h>
+#include <stdlib.h>
+#include <stdint.h>
 
-#include "Row.h"
-
-#define TABLE_MAX_PAGES 100
-static const uint32_t PAGE_SIZE = 4096;
-static const uint32_t ROWS_PER_PAGE = PAGE_SIZE / ROW_SIZE;
-static const uint32_t TABLE_MAX_ROWS = ROWS_PER_PAGE * TABLE_MAX_PAGES;
+#include "Pager.h"
+#include "Constants.h"
 
 typedef struct {
     uint32_t numRows;
-    void *pages[TABLE_MAX_PAGES];
+    PAGER *pager;
 } TABLE;
 
 void *rowSlot(TABLE *table, uint32_t rowNum);
-TABLE *newTable();
-void freeTable(TABLE *table);
 
 #endif
