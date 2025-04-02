@@ -8,10 +8,9 @@
 #include <stdint.h>
 
 #include "InputBuffer.h"
-#include "Row.h"
 #include "Table.h"
 #include "Row.h"
-
+#include "Statement.h"
 
 typedef enum {
     STATEMENT_INSERT,

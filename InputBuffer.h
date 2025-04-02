@@ -1,6 +1,9 @@
 #ifndef INPUTBUFFER_H
 #define INPUTBUFFER_H
 
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
 #define MAX_CHARS 1024

@@ -1,8 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdint.h>
-#include <string.h>
-
 #include "Row.h"
 
 void serialize_row(ROW *row, void *destination) {

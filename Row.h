@@ -1,7 +1,10 @@
 #ifndef ROW_H
 #define ROW_H
 
+#include <stdlib.h>
+#include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 
 #define COLUMN_EMAIL_SIZE 255
 #define COLUMN_USERNAME_SIZE 32

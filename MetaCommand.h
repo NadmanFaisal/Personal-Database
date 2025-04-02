@@ -1,6 +1,11 @@
 #ifndef METACOMMAND_H
 #define METACOMMAND_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+
 #include "InputBuffer.h"
 #include "Table.h"
 #include "DB.h"

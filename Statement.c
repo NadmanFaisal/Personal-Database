@@ -1,13 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <stdint.h>
-
-#include "InputBuffer.h"
 #include "Statement.h"
-#include "Table.h"
-#include "Row.h"
 
 #define COLUMN_EMAIL_SIZE 255
 #define COLUMN_USERNAME_SIZE 32
