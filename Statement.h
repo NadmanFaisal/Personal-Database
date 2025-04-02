@@ -11,6 +11,7 @@
 #include "Table.h"
 #include "Row.h"
 #include "Statement.h"
+#include "Cursor.h"
 
 typedef enum {
     STATEMENT_INSERT,

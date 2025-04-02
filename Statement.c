@@ -53,9 +53,12 @@ ExecuteResult executeInsert(STATEMENT *statement, TABLE *table) {
     }
 
     ROW *rowToInsert = &(statement->rowToInsert);
-    void *destination = rowSlot(table, table->numRows);
-    serialize_row(rowToInsert, destination);
+    CURSOR *cursor = endTable(table);
+
+    serialize_row(rowToInsert, cursorValue(cursor));
     table->numRows += 1;
+
+    free(cursor);
 
     return EXECUTE_SUCCESS;
 }

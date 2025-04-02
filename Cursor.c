@@ -26,3 +26,10 @@ void *cursorValue(CURSOR* cursor) {
     uint32_t byteOffset = rowOffset * ROW_SIZE;
     return page + byteOffset;
 }
+
+void cursorAdvance(CURSOR *cursor) {
+    cursor->rowNum += 1;
+    if(cursor->rowNum >= cursor->table->numRows) {
+        cursor->endOfTable = true;
+    }
+}
