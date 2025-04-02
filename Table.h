@@ -13,6 +13,5 @@ typedef struct {
     PAGER *pager;
 } TABLE;
 
-void *rowSlot(TABLE *table, uint32_t rowNum);
 
 #endif
