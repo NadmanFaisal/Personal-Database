@@ -48,16 +48,15 @@ PrepareResults prepareStatements(INPUTBUFFER *node, STATEMENT *statement) {
 }
 
 ExecuteResult executeInsert(STATEMENT *statement, TABLE *table) {
-    if(table->numRows >= TABLE_MAX_ROWS) {
+    void *node = getPage(table->pager, table->rootPageNum);
+    if(*leafNodeNumCells(node) >= LEAF_NODE_MAX_CELLS) {
         return EXECUTE_TABLE_FULL;
     }
 
     ROW *rowToInsert = &(statement->rowToInsert);
     CURSOR *cursor = tableEnd(table);
 
-    serialize_row(rowToInsert, cursorValue(cursor));
-    table->numRows += 1;
-
+    leafNodeInsert(cursor, rowToInsert->id, rowToInsert);
     free(cursor);
 
     return EXECUTE_SUCCESS;

@@ -7,9 +7,8 @@
 #include <stdint.h>
 
 #include "Table.h"
-#include "Node.h"
 
-typedef struct {
+typedef struct CURSOR {
     TABLE *table;
     uint32_t pageNum;
     uint32_t cellNum;

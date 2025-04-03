@@ -1,4 +1,5 @@
 #include "Cursor.h"
+#include "Node.h"
 
 CURSOR *tableStart(TABLE *table) {
     CURSOR *cursor = malloc(sizeof(CURSOR));
