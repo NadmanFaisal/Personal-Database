@@ -9,6 +9,7 @@
 #include "InputBuffer.h"
 #include "Table.h"
 #include "DB.h"
+#include "Constants.h"
 
 typedef enum {
     META_COMMAND_SUCCESS,
