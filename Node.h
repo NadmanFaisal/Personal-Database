@@ -38,6 +38,10 @@ static const uint32_t  LEAF_NODE_CELL_SIZE = LEAF_NODE_KEY_SIZE + LEAF_NODE_VALU
 static const uint32_t LEAF_NODE_SPACE_FOR_CELLS = PAGE_SIZE - LEAF_NODE_HEADER_SIZE;
 static const uint32_t LEAF_NODE_MAX_CELLS = LEAF_NODE_SPACE_FOR_CELLS / LEAF_NODE_CELL_SIZE;
 
-
+uint32_t *leafNodeNumCells(void *node);
+void *leafNodeCell(void *node, uint32_t cellNum);
+uint32_t *leafNodeKey(void *node, uint32_t cellNum);
+void *leafNodeValue(void *node, uint32_t cellNum);
+void initializeLeafNode(void *node);
 
 #endif
