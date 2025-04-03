@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Compile the program into executable file
-gcc main.c InputBuffer.c MetaCommand.c Row.c Statement.c Table.c Pager.c DB.c Cursor.c Node.c -o mydb
+gcc main.c src/*.c -IHeaders -o mydb
 
 
 # Test 1: Test whether insertion and retrieval is working as expected

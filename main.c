@@ -3,12 +3,12 @@
 #include <string.h>
 #include <stdbool.h>
 
-#include "InputBuffer.h"
-#include "MetaCommand.h"
-#include "Row.h"
-#include "Statement.h"
-#include "Table.h"
-#include "DB.h"
+#include "Headers/InputBuffer.h"
+#include "Headers/MetaCommand.h"
+#include "Headers/Row.h"
+#include "Headers/Statement.h"
+#include "Headers/Table.h"
+#include "Headers/DB.h"
 
 
 void printPrompt(void) {

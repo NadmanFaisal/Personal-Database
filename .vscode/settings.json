@@ -1,6 +1,14 @@
 {
     "files.associations": {
         "unistd.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "table.h": "c",
+        "db.h": "c",
+        "constants.h": "c",
+        "cursor.h": "c",
+        "node.h": "c",
+        "inputbuffer.h": "c",
+        "pager.h": "c",
+        "row.h": "c"
     }
 }
