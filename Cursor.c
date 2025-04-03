@@ -3,8 +3,12 @@
 CURSOR *tableStart(TABLE *table) {
     CURSOR *cursor = malloc(sizeof(CURSOR));
     cursor->table = table;
-    cursor->rowNum = 0;
-    cursor->endOfTable = (table->numRows == 0);
+    cursor->pageNum = table->rootPageNum;
+    cursor->cellNum = 0;
+
+    void *rootNode = getPage(table->pager, table->rootPageNum);
+    uint32_t cellNums = *leafNodeNumCells(rootNode);
+    cursor->endOfTable = (cellNums == 0);
 
     return cursor;
 }
@@ -12,24 +16,27 @@ CURSOR *tableStart(TABLE *table) {
 CURSOR *tableEnd(TABLE *table) {
     CURSOR *cursor = malloc(sizeof(CURSOR));
     cursor->table = table;
-    cursor->rowNum = table->numRows;
+    cursor->pageNum = table->rootPageNum;
+
+    void *rootNode = getPage(table->pager, table->rootPageNum);
+    uint32_t cellNums = *leafNodeNumCells(rootNode);
+    cursor->cellNum = cellNums;
     cursor->endOfTable = true;
 
     return cursor;
 }
 
 void *cursorValue(CURSOR* cursor) {
-    uint32_t rowNum = cursor->rowNum;
-    uint32_t pageNum = rowNum / ROWS_PER_PAGE;
+    uint32_t pageNum = cursor->pageNum;
     void *page = getPage(cursor->table->pager, pageNum);
-    uint32_t rowOffset = rowNum % ROWS_PER_PAGE;
-    uint32_t byteOffset = rowOffset * ROW_SIZE;
-    return page + byteOffset;
+    return leafNodeValue(page, cursor->cellNum);
 }
 
 void cursorAdvance(CURSOR *cursor) {
-    cursor->rowNum += 1;
-    if(cursor->rowNum >= cursor->table->numRows) {
+    uint32_t pageNum = cursor->pageNum;
+    void *node = getPage(cursor->table->pager, pageNum);
+    cursor->cellNum += 1;
+    if(cursor->cellNum >= (*leafNodeNumCells(node))) {
         cursor->endOfTable = true;
     }
 }

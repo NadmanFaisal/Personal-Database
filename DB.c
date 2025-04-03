@@ -3,35 +3,29 @@
 
 TABLE *openDB(const char *fileName) {
     PAGER *pager = openPager(fileName);
-    uint32_t numRows = pager->fileLen / ROW_SIZE;
+
     TABLE *table = (TABLE *)malloc(sizeof(TABLE));
     table->pager = pager;
-    table->numRows = numRows;
+    table->rootPageNum = 0;
+
+    if(pager->numPages == 0) {
+        void *rootNode = getPage(pager, 0);
+        initializeLeafNode(rootNode);
+    }
 
     return table;
 }
 
 void closeDB(TABLE *table) {
     PAGER *pager = table->pager;
-    uint32_t numOfFullPages = table->numRows / ROWS_PER_PAGE;
 
-    for(uint32_t i = 0; i < numOfFullPages; i++) {
+    for(uint32_t i = 0; i < pager->numPages; i++) {
         if(pager->pages[i] == NULL) {
             continue;
         }
-        flushPager(pager, i, PAGE_SIZE);
+        flushPager(pager, i);
         free(pager->pages[i]);
         pager->pages[i] = NULL;
-    }
-
-    uint32_t numOfAdditionalRows = table->numRows % ROWS_PER_PAGE;
-    if(numOfAdditionalRows > 0) {
-        uint32_t pageNum = numOfFullPages;
-        if(pager->pages[pageNum] != NULL) {
-            flushPager(pager, pageNum, numOfAdditionalRows * ROW_SIZE);
-            free(pager->pages[pageNum]);
-            pager->pages[pageNum] = NULL;
-        }
     }
 
     int result = close(pager->fileDesc);

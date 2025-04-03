@@ -7,10 +7,12 @@
 #include <stdint.h>
 
 #include "Table.h"
+#include "Node.h"
 
 typedef struct {
     TABLE *table;
-    u_int32_t rowNum;
+    uint32_t pageNum;
+    uint32_t cellNum;
     bool endOfTable;
 } CURSOR;
 

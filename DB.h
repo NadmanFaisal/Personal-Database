@@ -7,6 +7,7 @@
 
 #include "Table.h"
 #include "Pager.h"
+#include "Node.h"
 
 TABLE *openDB(const char *fileName);
 void closeDB(TABLE *table);

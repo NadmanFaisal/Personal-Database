@@ -9,7 +9,7 @@
 #include "Constants.h"
 
 typedef struct {
-    uint32_t numRows;
+    uint32_t rootPageNum;
     PAGER *pager;
 } TABLE;
 

@@ -9,16 +9,18 @@
 #include <errno.h>
 #include <unistd.h>
 #include <stdint.h>
+
 #include "Constants.h"
 
 typedef struct {
     int fileDesc;
     uint32_t fileLen;
+    uint32_t numPages;
     void *pages[TABLE_MAX_PAGES];
 } PAGER;
 
 PAGER *openPager(const char *fileName);
 void *getPage(PAGER *pager, uint32_t pageNum);
-void flushPager(PAGER *pager, uint32_t pageNum, uint32_t size);
+void flushPager(PAGER *pager, uint32_t pageNum);
 
 #endif
