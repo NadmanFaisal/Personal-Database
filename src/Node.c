@@ -37,33 +37,34 @@ void leafNodeInsert(CURSOR *cursor, uint32_t key, ROW *value) {
     serialize_row(value, leafNodeValue(node, cursor->cellNum));
 }
 
-CURSOR *findLeafNode(TABLE *table, uint32_t pageNum, uint32_t key) {
-    void *node = getPage(table->pager, pageNum);
-    uint32_t cellNums = *leafNodeNumCells(node);
-    
-    CURSOR *cursor = (CURSOR *)malloc(sizeof(CURSOR));
+CURSOR* findLeafNode(TABLE* table, uint32_t page_num, uint32_t key) {
+    void* node = getPage(table->pager, page_num);
+    uint32_t num_cells = *leafNodeNumCells(node);
+
+    CURSOR* cursor = malloc(sizeof(CURSOR));
     cursor->table = table;
-    cursor->pageNum = pageNum;
-    
+    cursor->pageNum = page_num;
+
     // Binary search
-    uint32_t lo = 0;
-    uint32_t hi = cellNums;
-    while(hi != lo) {
-        uint32_t mid = (lo + hi) / 2;
-        uint32_t suspect = *leafNodeKey(node, mid);
-        if(key == suspect) {
-            cursor->cellNum = mid;
-            return cursor;
-        }
-        
-        if(key < suspect) {
-            hi = mid;
-        } else {
-            lo = mid + 1;
-        }
+    uint32_t min_index = 0;
+    uint32_t one_past_max_index = num_cells;
+    while (one_past_max_index != min_index) {
+      uint32_t index = (min_index + one_past_max_index) / 2;
+      uint32_t key_at_index = *leafNodeKey(node, index);
+
+      if (key == key_at_index) {
+        cursor->cellNum = index;
+        return cursor;
+      }
+
+      if (key < key_at_index) {
+        one_past_max_index = index;
+      } else {
+        min_index = index + 1;
+      }
     }
-    
-    cursor->cellNum = lo;
+
+    cursor->cellNum = min_index;
     return cursor;
 }
 

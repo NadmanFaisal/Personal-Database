@@ -19,7 +19,7 @@ CURSOR *tableFind(TABLE* table, uint32_t key) {
     void *rootNode = getPage(table->pager, rootPageNum);
 
     if(getNodeType(rootNode) == NODE_LEAF) {
-        return leafNodeFind(table, rootPageNum, key);
+        return findLeafNode(table, rootPageNum, key);
     } else {
         printf("Need to implement searching an internal node.\n");
         exit(EXIT_FAILURE);

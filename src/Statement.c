@@ -49,7 +49,7 @@ PrepareResults prepareStatements(INPUTBUFFER *node, STATEMENT *statement) {
 
 ExecuteResult executeInsert(STATEMENT *statement, TABLE *table) {
     void *node = getPage(table->pager, table->rootPageNum);
-    uint32_t cellNums = getPage(table->pager, table->rootPageNum);
+    uint32_t cellNums = (*leafNodeNumCells(node));
     if(cellNums >= LEAF_NODE_MAX_CELLS) {
         return EXECUTE_TABLE_FULL;
     }
