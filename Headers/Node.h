@@ -20,6 +20,7 @@ typedef enum {
     NODE_LEAF
 } NodeType;
 
+void leafNodeSplitAndInsert(CURSOR *cursor, uint32_t key, ROW *value);
 uint32_t *leafNodeNumCells(void *node);
 void *leafNodeCell(void *node, uint32_t cellNum);
 uint32_t *leafNodeKey(void *node, uint32_t cellNum);
