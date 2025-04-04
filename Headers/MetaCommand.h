@@ -18,6 +18,7 @@ typedef enum {
 
 MetaCommandResult doMetaCommand(INPUTBUFFER *node, TABLE *table);
 void printConstants();
-void printLeafNode(void *node);
+void indent(uint32_t level);
+void printTree(PAGER *pager, uint32_t pageNum, uint32_t indentationLevel);
 
 #endif

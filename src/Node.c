@@ -102,15 +102,15 @@ void leafNodeSplitAndInsert(CURSOR *cursor, uint32_t key, ROW *value) {
     */
 
     for(int32_t i = LEAF_NODE_MAX_CELLS; i >= 0; i--) {
-        void *destination;
+        void *destinationNode;
         if(i >= LEAF_NODE_LEFT_SPLIT_COUNT) {
-            destination = newNode;
+            destinationNode = newNode;
         } else {
-            destination = oldNode;
+            destinationNode = oldNode;
         }
 
         uint32_t indexWithinNode = i % LEAF_NODE_LEFT_SPLIT_COUNT;
-        void *destination = leafNodeCell(destination, indexWithinNode);
+        void *destination = leafNodeCell(destinationNode, indexWithinNode);
 
         if(i == cursor->cellNum) {
             serialize_row(value, destination);
@@ -165,7 +165,7 @@ uint32_t *internalNodeCell(void *node, uint32_t cellNum) {
 uint32_t *internalNodeChild(void *node, uint32_t childNum) {
     uint32_t numKeys = *internalNodeNumKeys(node);
     if(childNum > numKeys) {
-        printf("Tried to access childNum %d > numKeys\n", childNum, numKeys);
+        printf("Tried to access childNum %d > numKeys %d\n", childNum, numKeys);
         exit(EXIT_FAILURE);
     } else if(childNum == numKeys) {
         return internalNodeRightChild(node);
