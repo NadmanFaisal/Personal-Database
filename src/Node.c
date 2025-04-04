@@ -41,3 +41,32 @@ void leafNodeInsert(CURSOR *cursor, uint32_t key, ROW *value) {
     serialize_row(value, leafNodeValue(node, cursor->cellNum));
 }
 
+CURSOR *findLeafNode(TABLE *table, uint32_t pageNum, uint32_t key) {
+    void *node = getPage(table->pager, pageNum);
+    uint32_t cellNums = *leafNodeNumCells(node);
+
+    CURSOR *cursor = (CURSOR *)malloc(sizeof(CURSOR));
+    cursor->table = table;
+    cursor->pageNum = pageNum;
+
+    // Binary search
+    uint32_t lo = 0;
+    uint32_t hi = cellNums;
+    while(hi != lo) {
+        uint32_t mid = (lo + hi) / 2;
+        uint32_t suspect = *leafNodeKey(node, mid);
+        if(key == suspect) {
+            cursor->cellNum = mid;
+            return cursor;
+        }
+
+        if(key < suspect) {
+            hi = mid;
+        } else {
+            lo = mid + 1;
+        }
+    }
+
+    cursor->cellNum = lo;
+    return cursor;
+}
