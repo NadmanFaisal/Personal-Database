@@ -27,7 +27,7 @@ void leafNodeInsert(CURSOR *cursor, uint32_t key, ROW *value) {
     }
     
     if(cursor->cellNum < cellNums) {
-        for(uint32_t i = cellNums; i < cursor->cellNum; i--) {
+        for(uint32_t i = cellNums; i > cursor->cellNum; i--) {
             memcpy(leafNodeCell(node, i), leafNodeCell(node, i - 1), LEAF_NODE_CELL_SIZE);
         }
     }

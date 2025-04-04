@@ -19,5 +19,6 @@ CURSOR *tableStart(TABLE *table);
 CURSOR *tableFind(TABLE* table, uint32_t key);
 void *cursorValue(CURSOR* cursor);
 void cursorAdvance(CURSOR *cursor);
+CURSOR *internalNodeFind(TABLE *table, uint32_t pageNum, uint32_t key);
 
 #endif
