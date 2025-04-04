@@ -24,9 +24,10 @@ uint32_t *leafNodeNumCells(void *node);
 void *leafNodeCell(void *node, uint32_t cellNum);
 uint32_t *leafNodeKey(void *node, uint32_t cellNum);
 void *leafNodeValue(void *node, uint32_t cellNum);
-void initializeLeafNode(void *node);
 void leafNodeInsert(CURSOR *cursor, uint32_t key, ROW *value);
 CURSOR *findLeafNode(TABLE *table, uint32_t pageNum, uint32_t key);
 NodeType getNodeType(void *node);
+void setNodeType(void *node, NodeType type);
+void initializeLeafNode(void *node);
 
 #endif
