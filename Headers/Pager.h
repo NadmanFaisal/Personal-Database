@@ -22,5 +22,6 @@ typedef struct {
 PAGER *openPager(const char *fileName);
 void *getPage(PAGER *pager, uint32_t pageNum);
 void flushPager(PAGER *pager, uint32_t pageNum);
+uint32_t getUnusedPageNum(PAGER *pager);
 
 #endif
