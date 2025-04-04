@@ -14,17 +14,16 @@ CURSOR *tableStart(TABLE *table) {
     return cursor;
 }
 
-CURSOR *tableEnd(TABLE *table) {
-    CURSOR *cursor = malloc(sizeof(CURSOR));
-    cursor->table = table;
-    cursor->pageNum = table->rootPageNum;
+CURSOR *tableFind(TABLE* table, uint32_t key) {
+    uint32_t rootPageNum = table->rootPageNum;
+    void *rootNode = getPage(table->pager, rootPageNum);
 
-    void *rootNode = getPage(table->pager, table->rootPageNum);
-    uint32_t cellNums = *leafNodeNumCells(rootNode);
-    cursor->cellNum = cellNums;
-    cursor->endOfTable = true;
-
-    return cursor;
+    if(getNodeType(rootNode) == NODE_LEAF) {
+        return leafNodeFind(table, rootPageNum, key);
+    } else {
+        printf("Need to implement searching an internal node.\n");
+        exit(EXIT_FAILURE);
+    }
 }
 
 void *cursorValue(CURSOR* cursor) {

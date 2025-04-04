@@ -49,12 +49,21 @@ PrepareResults prepareStatements(INPUTBUFFER *node, STATEMENT *statement) {
 
 ExecuteResult executeInsert(STATEMENT *statement, TABLE *table) {
     void *node = getPage(table->pager, table->rootPageNum);
-    if(*leafNodeNumCells(node) >= LEAF_NODE_MAX_CELLS) {
+    uint32_t cellNums = getPage(table->pager, table->rootPageNum);
+    if(cellNums >= LEAF_NODE_MAX_CELLS) {
         return EXECUTE_TABLE_FULL;
     }
 
     ROW *rowToInsert = &(statement->rowToInsert);
-    CURSOR *cursor = tableEnd(table);
+    uint32_t keyToInsert = rowToInsert->id;
+    CURSOR *cursor = tableFind(table, keyToInsert);
+
+    if(cursor->cellNum < cellNums) {
+        uint32_t keyAtIndex = *leafNodeKey(node, cursor->cellNum);
+        if(keyAtIndex == keyToInsert) {
+            return EXECUTE_DUPLICATE_KEY;
+        }
+    }
 
     leafNodeInsert(cursor, rowToInsert->id, rowToInsert);
     free(cursor);

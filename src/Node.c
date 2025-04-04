@@ -40,3 +40,4 @@ void leafNodeInsert(CURSOR *cursor, uint32_t key, ROW *value) {
     *(leafNodeKey(node, cursor->cellNum)) = key;
     serialize_row(value, leafNodeValue(node, cursor->cellNum));
 }
+
