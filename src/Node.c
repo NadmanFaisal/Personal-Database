@@ -116,7 +116,8 @@ void leafNodeSplitAndInsert(CURSOR *cursor, uint32_t key, ROW *value) {
         void *destination = leafNodeCell(destinationNode, indexWithinNode);
 
         if(i == cursor->cellNum) {
-            serialize_row(value, destination);
+            serialize_row(value, leafNodeValue(destinationNode, indexWithinNode));
+            *leafNodeKey(destinationNode, indexWithinNode) = key;
         } else if(i > cursor->cellNum) {
             memcpy(destination, leafNodeCell(oldNode, i - 1), LEAF_NODE_CELL_SIZE);
         } else {
