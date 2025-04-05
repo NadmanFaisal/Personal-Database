@@ -14,6 +14,7 @@ void indent(uint32_t level) {
         printf("    ");
     }
 }
+
 void printTree(PAGER *pager, uint32_t pageNum, uint32_t indentationLevel) {
     void *node = getPage(pager, pageNum);
     uint32_t numKeys, child;
@@ -23,15 +24,23 @@ void printTree(PAGER *pager, uint32_t pageNum, uint32_t indentationLevel) {
             numKeys = *leafNodeNumCells(node);
             indent(indentationLevel);
             printf("- leaf (size %d)\n", numKeys);
-            
             for(uint32_t i = 0; i < numKeys; i++) {
+                indent(indentationLevel + 1);
+                printf("- key %d\n", *leafNodeKey(node, i));
+            }
+
+            break;
+        case(NODE_INTERNAL):
+            numKeys = *internalNodeNumKeys(node);
+            indent(indentationLevel);
+            printf("- internal (size %d)\n", numKeys);
+            for (uint32_t i = 0; i < numKeys; i++) {
                 child = *internalNodeChild(node, i);
                 printTree(pager, child, indentationLevel + 1);
-                
+    
                 indent(indentationLevel + 1);
                 printf("- key %d\n", *internalNodeKey(node, i));
             }
-
             child = *internalNodeRightChild(node);
             printTree(pager, child, indentationLevel + 1);
             break;

@@ -138,7 +138,7 @@ void leafNodeSplitAndInsert(CURSOR *cursor, uint32_t key, ROW *value) {
         void *parent = getPage(cursor->table->pager, parentPageNum);
 
         updateInternalNodeKey(parent, oldMax, newMax);
-        internalNodeInsert(cursor->table->pager, parentPageNum);
+        internalNodeInsert(cursor->table, parentPageNum, newPageNum);
         return;
     }
 }
@@ -192,7 +192,7 @@ uint32_t *internalNodeChild(void *node, uint32_t childNum) {
 }
 
 uint32_t *internalNodeKey(void *node, uint32_t keyNum) {
-    return internalNodeCell(node, keyNum) + INTERNAL_NODE_CHILD_SIZE;
+    return (void*)internalNodeCell(node, keyNum) + INTERNAL_NODE_CHILD_SIZE;
 }
 
 uint32_t getNodeMaxKey(void *node) {
@@ -231,4 +231,36 @@ uint32_t *nodeParent(void *node) {
 void updateInternalNodeKey(void *node, uint32_t oldKey, uint32_t newKey) {
     uint32_t oldChildIndex = internalNodeFindChild(node, oldKey);
     *internalNodeKey(node, oldChildIndex) = newKey;
+}
+
+void internalNodeInsert(TABLE *table, uint32_t parentPageNum, uint32_t childPageNum) {
+    void *parent = getPage(table->pager, parentPageNum);
+    void *child = getPage(table->pager, childPageNum);
+    uint32_t childMaxKey = getNodeMaxKey(child);
+    uint32_t index = internalNodeFindChild(parent, childMaxKey);
+
+    uint32_t originalNumKeys = *internalNodeNumKeys(parent);
+    *internalNodeNumKeys(parent) = originalNumKeys + 1;
+
+    if(originalNumKeys >= INTERNAL_NODE_MAX_CELLS) {
+        printf("Need to implement splitting internal node.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    uint32_t rightChildPageNum = *internalNodeRightChild(parent);
+    void *rightChild = getPage(table->pager, rightChildPageNum);
+
+    if(childMaxKey > getNodeMaxKey(rightChild)) {
+        *internalNodeChild(parent, originalNumKeys) = rightChildPageNum;
+        *internalNodeKey(parent, originalNumKeys) = getNodeMaxKey(rightChild);
+        *internalNodeRightChild(parent) = childPageNum;
+    } else {
+        for(uint32_t i = originalNumKeys; i > index; i--) {
+            void *destination = internalNodeCell(parent, i);
+            void *source = internalNodeCell(parent, i - 1);
+            memcpy(destination, source, INTERNAL_NODE_CELL_SIZE);
+        }
+        *internalNodeChild(parent, index);
+        *internalNodeKey(parent, index) = childMaxKey;
+    }
 }
