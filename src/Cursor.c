@@ -44,8 +44,7 @@ void cursorAdvance(CURSOR *cursor) {
     }
 }
 
-CURSOR *internalNodeFind(TABLE *table, uint32_t pageNum, uint32_t key) {
-    void *node = getPage(table->pager, pageNum);
+uint32_t internalNodeFindChild(void* node, uint32_t key) {
     uint32_t numKeys = *internalNodeNumKeys(node);
 
     uint32_t lo = 0;
@@ -61,7 +60,14 @@ CURSOR *internalNodeFind(TABLE *table, uint32_t pageNum, uint32_t key) {
         }
     }
 
-    uint32_t childNum = *internalNodeCell(node, lo);
+    return lo;
+}
+
+CURSOR *internalNodeFind(TABLE *table, uint32_t pageNum, uint32_t key) {
+    void *node = getPage(table->pager, pageNum);
+    
+    uint32_t childIndex = internalNodeFindChild(node, key);
+    uint32_t childNum = *internalNodeChild(node, childIndex);
     void *child = getPage(table->pager, childNum);
     switch(getNodeType(child)) {
         case NODE_LEAF:

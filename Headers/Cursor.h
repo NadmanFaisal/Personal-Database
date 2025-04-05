@@ -19,6 +19,7 @@ CURSOR *tableStart(TABLE *table);
 CURSOR *tableFind(TABLE* table, uint32_t key);
 void *cursorValue(CURSOR* cursor);
 void cursorAdvance(CURSOR *cursor);
+uint32_t internalNodeFindChild(void* node, uint32_t key);
 CURSOR *internalNodeFind(TABLE *table, uint32_t pageNum, uint32_t key);
 
 #endif

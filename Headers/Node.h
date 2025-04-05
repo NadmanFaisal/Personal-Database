@@ -43,5 +43,7 @@ bool isNodeRoot(void *node);
 void setNodeRoot(void *node, bool isRoot);
 void initializeInternalNode(void *node);
 uint32_t *leafNodeNextLeaf(void *node);
+uint32_t *nodeParent(void *node);
+void updateInternalNodeKey(void *node, uint32_t oldKey, uint32_t newKey);
 
 #endif
