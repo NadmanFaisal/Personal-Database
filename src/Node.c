@@ -82,6 +82,7 @@ void initializeLeafNode(void *node) {
     setNodeType(node, NODE_LEAF);
     setNodeRoot(node, false);
     *leafNodeNumCells(node) = 0;
+    *leafNodeNextLeaf(node) = 0;
 }
 
 void leafNodeSplitAndInsert(CURSOR *cursor, uint32_t key, ROW *value) {
@@ -94,6 +95,8 @@ void leafNodeSplitAndInsert(CURSOR *cursor, uint32_t key, ROW *value) {
     uint32_t newPageNum = getUnusedPageNum(cursor->table->pager);
     void *newNode = getPage(cursor->table->pager, newPageNum);
     initializeLeafNode(newNode);
+    *leafNodeNextLeaf(newNode) = *leafNodeNextLeaf(oldNode);
+    *leafNodeNextLeaf(oldNode) = newPageNum;
 
     /*
     Divide evenly all existing keys and new key between 
@@ -201,4 +204,8 @@ void initializeInternalNode(void *node) {
     setNodeType(node, NODE_INTERNAL);
     setNodeRoot(node, false);
     *internalNodeNumKeys(node) = 0;
+}
+
+uint32_t *leafNodeNextLeaf(void *node) {
+    return node + LEAF_NODE_NEXT_LEAF_OFFSET;
 }
