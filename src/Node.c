@@ -260,7 +260,7 @@ void internalNodeInsert(TABLE *table, uint32_t parentPageNum, uint32_t childPage
             void *source = internalNodeCell(parent, i - 1);
             memcpy(destination, source, INTERNAL_NODE_CELL_SIZE);
         }
-        *internalNodeChild(parent, index);
+        *internalNodeChild(parent, index) = childPageNum;
         *internalNodeKey(parent, index) = childMaxKey;
     }
 }
