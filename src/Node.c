@@ -316,7 +316,7 @@ void internalNodeSplitAndInsert(TABLE *table, uint32_t parentPageNum, uint32_t c
         parent = getPage(table->pager, table->rootPageNum);
 
         oldPageNum = *internalNodeChild(parent, 0);
-        oldNode = getPage(table->pager, newPageNum);
+        oldNode = getPage(table->pager, oldPageNum);
     } else {
         parent = getPage(table->pager, *nodeParent(oldNode));
         newNode = getPage(table->pager, newPageNum);
