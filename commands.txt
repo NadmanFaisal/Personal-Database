@@ -1,12 +1,3 @@
-#!/bin/bash
-
-# Make sure the executable is built
-gcc main.c src/*.c -IHeaders -o mydb
-
-# Create a temp script file for feeding input to the database
-SCRIPT_FILE="commands.txt"
-
-cat > $SCRIPT_FILE <<EOF
 insert 58 user58 person58@example.com
 insert 56 user56 person56@example.com
 insert 8 user8 person8@example.com
@@ -73,8 +64,3 @@ insert 60 user60 person60@example.com
 insert 44 user44 person44@example.com
 .btree
 .exit
-EOF
-
-# Run the script through the database
-echo "Running B-tree structure test..."
-./mydb mydb.db < $SCRIPT_FILE

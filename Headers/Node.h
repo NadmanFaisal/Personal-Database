@@ -37,7 +37,7 @@ uint32_t* internalNodeRightChild(void* node);
 uint32_t *internalNodeCell(void *node, uint32_t cellNum);
 uint32_t *internalNodeChild(void *node, uint32_t childNum);
 uint32_t *internalNodeKey(void *node, uint32_t keyNum);
-uint32_t getNodeMaxKey(void *node);
+uint32_t getNodeMaxKey(PAGER *pager, void *node);
 bool isNodeRoot(void *root);
 bool isNodeRoot(void *node);
 void setNodeRoot(void *node, bool isRoot);
@@ -46,5 +46,6 @@ uint32_t *leafNodeNextLeaf(void *node);
 uint32_t *nodeParent(void *node);
 void updateInternalNodeKey(void *node, uint32_t oldKey, uint32_t newKey);
 void internalNodeInsert(TABLE *table, uint32_t parentPageNum, uint32_t childPageNum);
+void internalNodeSplitAndInsert(TABLE *table, uint32_t parentPageNum, uint32_t childPageNum);
 
 #endif

@@ -34,18 +34,21 @@ void printTree(PAGER *pager, uint32_t pageNum, uint32_t indentationLevel) {
             numKeys = *internalNodeNumKeys(node);
             indent(indentationLevel);
             printf("- internal (size %d)\n", numKeys);
-            for (uint32_t i = 0; i < numKeys; i++) {
-                child = *internalNodeChild(node, i);
+            if(numKeys > 0) {
+                for(uint32_t i = 0; i < numKeys; i++) {
+                    child = *internalNodeChild(node, i);
+                    printTree(pager, child, indentationLevel + 1);
+
+                    indent(indentationLevel + 1);
+                    printf("- key %d\n", *internalNodeKey(node, i));
+                }
+                child = *internalNodeRightChild(node);
                 printTree(pager, child, indentationLevel + 1);
-    
-                indent(indentationLevel + 1);
-                printf("- key %d\n", *internalNodeKey(node, i));
             }
-            child = *internalNodeRightChild(node);
-            printTree(pager, child, indentationLevel + 1);
             break;
     }
 }
+
 
 MetaCommandResult doMetaCommand(INPUTBUFFER *node, TABLE *table) {
     if(strcmp(node->buffer, ".exit") == 0) {
