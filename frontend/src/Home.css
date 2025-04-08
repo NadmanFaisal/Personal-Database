@@ -1,0 +1,16 @@
+.parent-container {
+    display: flex;
+    flex-direction: row;
+    align-items:center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.scrollable-div {
+    background-color: #252525;
+    height: 600px;
+    width: 80%;
+    overflow-y: scroll;
+    text-align: justify;
+}
