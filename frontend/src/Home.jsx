@@ -1,11 +1,28 @@
 import './Home.css'
+import { useState } from 'react'
+
+export default function CommandScreen() {
+    return (
+        <div className="parent-container">
+            <Screen />
+        </div>
+    )
+}
 
 function InputField() {
+    const [inputText, setInput] = useState("");
+    
+    function handleEnter(event) {
+        event.preventDefault()
+        alert(inputText)
+    }
+
     return (
-        <form>
-            db &gt; <input className="input-field" type="text" />
+        <form onSubmit={handleEnter}>
+            db &gt; <input className="input-field" value={inputText} type="text" onChange={(e) => setInput(e.target.value)} />
         </form>
     )
+
 }
 
 function TopBar() {
@@ -20,14 +37,6 @@ function Screen() {
         <div className="scrollable-div">
             <TopBar />
             <InputField />
-        </div>
-    )
-}
-
-export default function CommandScreen() {
-    return (
-        <div className="parent-container">
-            <Screen />
         </div>
     )
 }
