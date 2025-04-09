@@ -1,3 +1,15 @@
+.explore-tab {
+    display: flex;
+    flex-direction: column;
+    height: 5%;
+    background-color: #313131;
+}
+
+.input-field {
+    background: transparent;
+    border: none;
+}
+
 .parent-container {
     display: flex;
     flex-direction: row;
@@ -8,9 +20,10 @@
 }
 
 .scrollable-div {
-    background-color: #252525;
+    background-color: #494949;
     height: 600px;
     width: 80%;
     overflow-y: scroll;
     text-align: justify;
+    border-radius: 5px;
 }
