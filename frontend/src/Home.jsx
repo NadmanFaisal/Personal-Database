@@ -9,22 +9,6 @@ export default function CommandScreen() {
     )
 }
 
-function InputField() {
-    const [inputText, setInput] = useState("");
-    
-    function handleEnter(event) {
-        event.preventDefault()
-        alert(inputText)
-    }
-
-    return (
-        <form onSubmit={handleEnter}>
-            db &gt; <input className="input-field" value={inputText} type="text" onChange={(e) => setInput(e.target.value)} />
-        </form>
-    )
-
-}
-
 function TopBar() {
     return (
         <div className="explore-tab">
@@ -33,10 +17,24 @@ function TopBar() {
 }
 
 function Screen() {
+    const [inputText, setInput] = useState("");
+    const [outputText, setOutput] = useState("");
+
     return (
         <div className="scrollable-div">
             <TopBar />
-            <InputField />
+            <div className="terminal">
+                {outputText}
+            </div>
+            <form>
+                db &gt; <input className="input-field" value={inputText} type="text" onChange={(e) => setInput(e.target.value)} onKeyDown={e=>{
+                    if(e.key === "Enter") {
+                        e.preventDefault()
+                        setOutput(inputText)
+                        setInput("")
+                    }
+                }}/>
+            </form>
         </div>
     )
 }
