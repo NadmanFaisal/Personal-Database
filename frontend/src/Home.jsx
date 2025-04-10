@@ -18,19 +18,22 @@ function TopBar() {
 
 function Screen() {
     const [inputText, setInput] = useState("");
-    const [outputText, setOutput] = useState("");
+    const [outputText, setOutput] = useState([]);
 
     return (
         <div className="scrollable-div">
             <TopBar />
             <div className="terminal">
-                {outputText}
+                {outputText.map((line, index) => (
+                    <div key={index}>$ {line}</div>
+                ))}
             </div>
+
             <form>
                 db &gt; <input className="input-field" value={inputText} type="text" onChange={(e) => setInput(e.target.value)} onKeyDown={e=>{
                     if(e.key === "Enter") {
                         e.preventDefault()
-                        setOutput(inputText)
+                        outputText.push(inputText)
                         setInput("")
                     }
                 }}/>
