@@ -1,5 +1,5 @@
 import './Home.css'
-import { fetchPostRequest } from './api/api.js'
+import { insertRequest, selectRequest } from './api/api.js'
 import { useState } from 'react'
 
 export default function CommandScreen() {
@@ -27,7 +27,7 @@ function Screen() {
             outputText.push(inputText)
 
             try {
-                const response = await fetchPostRequest()
+                const response = await insertRequest(inputText)
                 outputText.push(response)
             } catch(error) {
                 console.log(error)
