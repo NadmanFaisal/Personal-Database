@@ -1,4 +1,5 @@
 import './Home.css'
+import { fetchPostRequest } from './api/api.js'
 import { useState } from 'react'
 
 export default function CommandScreen() {
@@ -18,7 +19,24 @@ function TopBar() {
 
 function Screen() {
     const [inputText, setInput] = useState("");
-    const [outputText, setOutput] = useState([]);
+    const [outputText] = useState([]);
+
+    const handleEnterPress = async (e) => {
+        if(e.key == 'Enter') {
+            e.preventDefault()
+            outputText.push(inputText)
+
+            try {
+                const response = await fetchPostRequest()
+                outputText.push(response)
+            } catch(error) {
+                console.log(error)
+                outputText.push('Error: ' + error.message)
+            }
+
+            setInput("")
+        }
+    }
 
     return (
         <div className="scrollable-div">
@@ -30,13 +48,7 @@ function Screen() {
             </div>
 
             <form>
-                db &gt; <input className="input-field" value={inputText} type="text" onChange={(e) => setInput(e.target.value)} onKeyDown={e=>{
-                    if(e.key === "Enter") {
-                        e.preventDefault()
-                        outputText.push(inputText)
-                        setInput("")
-                    }
-                }}/>
+                db &gt; <input className="input-field" value={inputText} type="text" onChange={(e) => setInput(e.target.value)} onKeyDown={handleEnterPress}/>
             </form>
         </div>
     )
