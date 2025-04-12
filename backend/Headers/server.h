@@ -11,7 +11,7 @@ struct Server {
     int service;
     int protocol;
     int backlog;
-    u_long interface;
+    __u_long interface;
 
     int socket;
     struct sockaddr_in addr;
@@ -19,7 +19,7 @@ struct Server {
     void(*launch)(struct Server *server);
 };
 
-struct Server serverConstructor(int domain, int port, int service, int protocol, int backlog, u_long interface, void(*launch)(struct Server *server));
+struct Server serverConstructor(int domain, int port, int service, int protocol, int backlog, __u_long interface, void(*launch)(struct Server *server));
 void launch(struct Server *server);
 
 #endif SERVER_H
