@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include "server.h"
+#include "Server.h"
 
 struct Server serverConstructor(int domain, int port, int service, int protocol, int backlog, __u_long interface, void (*launch)(struct Server *server)) {
     struct Server server;
@@ -45,7 +45,7 @@ void launch(struct Server *server) {
         int new_socket = accept(server->socket, (struct sockaddr*)&server->addr, (socklen_t*)&addrlen);
         ssize_t bytesRead = read(new_socket, buffer, BUFFER_SIZE - 1);
         if (bytesRead >= 0) {
-            buffer[bytesRead] = '\0';  // Null terminate the string
+            buffer[bytesRead] = '\0';
             puts(buffer);
         } else {
             perror("Error reading buffer...\n");
@@ -58,7 +58,7 @@ void launch(struct Server *server) {
                          "<title>Testing Basic HTTP-SERVER</title>\r\n"
                          "</head>\r\n"
                          "<body>\r\n"
-                         "Hello, Ahmed!\r\n"
+                         "Hello, Nadman!\r\n"
                          "</body>\r\n"
                          "</html>\r\n";
         write(new_socket, response, strlen(response));
