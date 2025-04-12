@@ -4,7 +4,7 @@
 #include <string.h>
 #include "server.h"
 
-struct Server server_Constructor(int domain, int port, int service, int protocol, int backlog, __u_long interface, void (*launch)(struct Server *server)) {
+struct Server serverConstructor(int domain, int port, int service, int protocol, int backlog, __u_long interface, void (*launch)(struct Server *server)) {
     struct Server server;
 
     server.domain = domain;
@@ -35,4 +35,33 @@ struct Server server_Constructor(int domain, int port, int service, int protocol
 
     server.launch = launch;
     return server;
+}
+
+void launch(struct Server *server) {
+    char buffer[BUFFER_SIZE];
+    while (1) {
+        printf("=== WAITING FOR CONNECTION === \n");
+        int addrlen = sizeof(server->addr);
+        int new_socket = accept(server->socket, (struct sockaddr*)&server->addr, (socklen_t*)&addrlen);
+        ssize_t bytesRead = read(new_socket, buffer, BUFFER_SIZE - 1);
+        if (bytesRead >= 0) {
+            buffer[bytesRead] = '\0';  // Null terminate the string
+            puts(buffer);
+        } else {
+            perror("Error reading buffer...\n");
+        }
+        char *response = "HTTP/1.1 200 OK\r\n"
+                         "Content-Type: text/html; charset=UTF-8\r\n\r\n"
+                         "<!DOCTYPE html>\r\n"
+                         "<html>\r\n"
+                         "<head>\r\n"
+                         "<title>Testing Basic HTTP-SERVER</title>\r\n"
+                         "</head>\r\n"
+                         "<body>\r\n"
+                         "Hello, Ahmed!\r\n"
+                         "</body>\r\n"
+                         "</html>\r\n";
+        write(new_socket, response, strlen(response));
+        close(new_socket);
+    }
 }
