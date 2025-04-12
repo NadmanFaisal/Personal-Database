@@ -19,19 +19,20 @@ function TopBar() {
 
 function Screen() {
     const [inputText, setInput] = useState("");
-    const [outputText] = useState([]);
+    const [outputText, setOutput] = useState([]);
 
     const handleEnterPress = async (e) => {
         if(e.key == 'Enter') {
             e.preventDefault()
-            outputText.push(inputText)
+            setOutput(outputText => [...outputText, inputText])
 
             try {
                 const response = await insertRequest(inputText)
-                outputText.push(response)
+                setOutput(outputText => [...outputText, response])
             } catch(error) {
                 console.log(error)
-                outputText.push('Error: ' + error.message)
+                const response = ('Error: ' + error.message)
+                setOutput(outputText => [...outputText, response])
             }
 
             setInput("")
