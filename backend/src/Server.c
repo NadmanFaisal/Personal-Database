@@ -50,6 +50,13 @@ void launch(struct Server *server) {
         } else {
             perror("Error reading buffer...\n");
         }
+
+        char *body = strstr(buffer, "\r\n\r\n");
+        if (body) body += 4;
+        else body = buffer;
+
+        printf("Server received: %s\n", body);
+        
         char *response = "HTTP/1.1 200 OK\r\n"
                          "Content-Type: text/html; charset=UTF-8\r\n\r\n"
                          "<!DOCTYPE html>\r\n"
