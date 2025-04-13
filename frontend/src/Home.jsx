@@ -1,5 +1,5 @@
 import './Home.css'
-import { insertRequest } from './api/api.js'
+import { insertRequest, selectRequest } from './api/api.js'
 import { useState } from 'react'
 
 export default function CommandScreen() {
@@ -27,8 +27,13 @@ function Screen() {
             setOutput(outputText => [...outputText, inputText])
 
             try {
-                const response = await insertRequest(inputText)
-                setOutput(outputText => [...outputText, response.result])
+                if(inputText.includes('insert')) {
+                    const response = await insertRequest(inputText)
+                    setOutput(outputText => [...outputText, response])
+                } else {
+                    const response = await selectRequest(inputText)
+                    setOutput(outputText => [...outputText, response])
+                }
             } catch(error) {
                 console.log(error)
                 const response = ('Error: ' + error.message)

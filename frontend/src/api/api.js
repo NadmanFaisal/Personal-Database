@@ -8,8 +8,8 @@ export async function insertRequest(requestBody) {
     }
     try {
         const response = await fetch(BASE_URL + '/POST', request)
-        const json = await response.json()
-        return json
+        const text = await response.text()
+        return text
     } catch(error) {
         throw new Error(error.message)
     }
@@ -18,8 +18,8 @@ export async function insertRequest(requestBody) {
 export async function selectRequest() {
     try {
         const response = await fetch(BASE_URL + '/GET')
-        const json = response.json()
-        return json
+        const text = response.text()
+        return text
     } catch(error) {
         throw new Error(error.message)
     }
