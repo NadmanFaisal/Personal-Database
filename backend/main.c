@@ -17,8 +17,8 @@ void printPrompt(void) {
 }
 
 int main(int argc, char **argv) {
-    struct Server server = serverConstructor(AF_INET, 3001, SOCK_STREAM, 0, 10, INADDR_ANY, launch);
-    server.launch(&server);
+    // struct Server server = serverConstructor(AF_INET, 3001, SOCK_STREAM, 0, 10, INADDR_ANY, launch);
+    // server.launch(&server);
 
     if(argc < 2) {
         printf("Must supply a database filename.\n");
