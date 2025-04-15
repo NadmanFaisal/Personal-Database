@@ -10,6 +10,7 @@
 #include "Headers/Table.h"
 #include "Headers/DB.h"
 #include "Headers/Server.h"
+#include "Headers/Logger.h"
 
 
 void printPrompt(void) {
@@ -29,6 +30,7 @@ int main(int argc, char **argv) {
     TABLE *table = openDB(fileName);
     INPUTBUFFER *buffer = createBuffer();
     while(true) {
+        clearLog();
         printPrompt();
         readInput(buffer);
         
@@ -37,7 +39,7 @@ int main(int argc, char **argv) {
                 case (META_COMMAND_SUCCESS):
                     continue;
                 case (META_COMMAND_UNRECOGNIZED_COMMAND):
-                    printf("Unrecognized command: '%s'\n", buffer->buffer);
+                    logOutput("Unrecognized command: '%s'\n", buffer->buffer);
                     continue;
             }
         }
