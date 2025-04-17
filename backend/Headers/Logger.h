@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-void logOutput(const char *format, ...);
-void clearLog();
+void logOutput(const char *fileName, const char *logMode, const char *format, ...);
+void clearLog(const char *fileName);
 
 #endif

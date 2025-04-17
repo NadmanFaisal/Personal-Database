@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include "Server.h"
+#include "Logger.h"
 
 struct Server serverConstructor(int domain, int port, int service, int protocol, int backlog, __u_long interface, void (*launch)(struct Server *server)) {
     struct Server server;
@@ -44,31 +45,42 @@ void launch(struct Server *server) {
         int addrlen = sizeof(server->addr);
         int new_socket = accept(server->socket, (struct sockaddr*)&server->addr, (socklen_t*)&addrlen);
         ssize_t bytesRead = read(new_socket, buffer, BUFFER_SIZE - 1);
+        
         if (bytesRead >= 0) {
             buffer[bytesRead] = '\0';
-            puts(buffer);
+            // puts(buffer);
         } else {
             perror("Error reading buffer...\n");
         }
-
-        char *body = strstr(buffer, "\r\n\r\n");
-        if (body) body += 4;
-        else body = buffer;
-
-        printf("Server received: %s\n", body);
         
-        char *response = "HTTP/1.1 200 OK\r\n"
-                         "Content-Type: text/html; charset=UTF-8\r\n\r\n"
-                         "<!DOCTYPE html>\r\n"
-                         "<html>\r\n"
-                         "<head>\r\n"
-                         "<title>Testing Basic HTTP-SERVER</title>\r\n"
-                         "</head>\r\n"
-                         "<body>\r\n"
-                         "Hello, Nadman!\r\n"
-                         "</body>\r\n"
-                         "</html>\r\n";
-        write(new_socket, response, strlen(response));
+        char *body = strstr(buffer, "\r\n\r\n");
+        if (body) {
+            body += 4;
+            logOutput("command.txt", "w", "%s\n", body);
+            usleep(300000);
+        }
+
+        const char *header = "HTTP/1.1 200 OK\r\n"
+                             "Content-Type: text/plain\r\n"
+                             "Access-Control-Allow-Origin: *\r\n"
+                             "Connection: close\r\n"
+                             "\r\n";
+        write(new_socket, header, strlen(header));
+
+        FILE *file = fopen("output.txt", "r");
+            if (file) {
+                char fileBuffer[1024];
+                size_t bytes;
+                while ((bytes = fread(fileBuffer, 1, sizeof(fileBuffer), file)) > 0) {
+                    fileBuffer[bytes] = '\0';
+                    write(new_socket, fileBuffer, bytes);
+                    printf("%s", fileBuffer);
+                }
+                fclose(file);
+            } else {
+                const char *errorMessage = "Log file not found.\n";
+                write(new_socket, errorMessage, strlen(errorMessage));
+            }
         close(new_socket);
     }
 }

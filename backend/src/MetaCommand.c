@@ -1,4 +1,8 @@
+#include <signal.h>
 #include "MetaCommand.h"
+#include "Logger.h"
+
+extern pid_t server_pid;
 
 void printConstants() {
     printf("ROW_SIZE: %d\n", ROW_SIZE);
@@ -52,7 +56,11 @@ void printTree(PAGER *pager, uint32_t pageNum, uint32_t indentationLevel) {
 
 MetaCommandResult doMetaCommand(INPUTBUFFER *node, TABLE *table) {
     if(strcmp(node->buffer, ".exit") == 0) {
+        logOutput("output.txt", "a", "Shutting down database...\n");
         closeDB(table);
+        remove("command.txt");
+        remove("output.txt");
+        kill(server_pid, SIGTERM);
         exit(0);
     } else if(strcmp(node->buffer, ".constants") == 0) {
         printf("Constants:\n");

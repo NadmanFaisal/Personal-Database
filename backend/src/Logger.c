@@ -2,8 +2,8 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
-void logOutput(const char *format, ...) {
-    FILE *file = fopen("output.txt", "a");
+void logOutput(const char *fileName, const char *logMode, const char *format, ...) {
+    FILE *file = fopen(fileName, logMode);
     if(!file) {
         printf("File was not created\n");
         exit(EXIT_FAILURE);
@@ -17,8 +17,8 @@ void logOutput(const char *format, ...) {
     fclose(file);
 }
 
-void clearLog() {
-    FILE *file = fopen("output.txt", "w");
+void clearLog(const char *fileName) {
+    FILE *file = fopen(fileName, "w");
     if(file) {
         fclose(file);
     }

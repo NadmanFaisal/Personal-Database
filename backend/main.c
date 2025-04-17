@@ -12,34 +12,79 @@
 #include "Headers/Server.h"
 #include "Headers/Logger.h"
 
+pid_t server_pid = -1;
 
 void printPrompt(void) {
     printf("db > ");
 }
 
+void readInputFromFile(INPUTBUFFER *node, const char *filename) {
+    FILE *cmdFile = fopen(filename, "r");
+    if (!cmdFile) {
+        printf("Command file not found\n");
+        return;
+    }
+
+    memset(node->buffer, 0, MAX_CHARS);
+    node->inputLength = 0;
+
+    size_t bytesRead = fread(node->buffer, 1, MAX_CHARS - 1, cmdFile);
+    fclose(cmdFile);
+    remove(filename);
+    
+    if (bytesRead == 0) {
+        node->buffer[0] = '\0';
+        node->inputLength = 0;
+        return;
+    }
+    
+    node->buffer[bytesRead] = '\0';
+    node->inputLength = strlen(node->buffer);
+    
+    while (node->inputLength > 0 &&
+          (node->buffer[node->inputLength - 1] == '\n' ||
+           node->buffer[node->inputLength - 1] == '\r')) {
+        node->buffer[--node->inputLength] = '\0';
+    }
+}
+
 int main(int argc, char **argv) {
-    // struct Server server = serverConstructor(AF_INET, 3001, SOCK_STREAM, 0, 10, INADDR_ANY, launch);
-    // server.launch(&server);
 
     if(argc < 2) {
         printf("Must supply a database filename.\n");
         exit(EXIT_FAILURE);
     }
 
+    
+    pid_t pid = fork();
+    
+    if (pid == 0) {
+        struct Server server = serverConstructor(AF_INET, 3001, SOCK_STREAM, 0, 10, INADDR_ANY, launch);
+        server.launch(&server);
+        exit(0);
+    } else {
+        server_pid = pid;
+    }
+    
     char *fileName = argv[1];
     TABLE *table = openDB(fileName);
     INPUTBUFFER *buffer = createBuffer();
     while(true) {
-        clearLog();
         printPrompt();
-        readInput(buffer);
+        
+        while (access("command.txt", F_OK) == -1) {
+            usleep(100000);
+        }
+        
+        readInputFromFile(buffer, "command.txt");
+        clearLog("output.txt");
         
         if(buffer->buffer[0] == '.') {
             switch (doMetaCommand(buffer, table)) {
                 case (META_COMMAND_SUCCESS):
                     continue;
                 case (META_COMMAND_UNRECOGNIZED_COMMAND):
-                    logOutput("Unrecognized command: '%s'\n", buffer->buffer);
+                    logOutput("output.txt", "a", "Unrecognized command: '%s'\n", buffer->buffer);
                     continue;
             }
         }
