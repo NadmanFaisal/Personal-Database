@@ -1,4 +1,5 @@
 #include "Pager.h"
+#include "Logger.h"
 
 PAGER *openPager(const char *fileName) {
     int fd = open(
@@ -11,6 +12,7 @@ PAGER *openPager(const char *fileName) {
 
     if(fd == -1) {
         printf("Unable to open file.\n");
+        logOutput("output.txt", "a", "Unable to open file.\n");
         exit(EXIT_FAILURE);
     }
 
@@ -23,6 +25,7 @@ PAGER *openPager(const char *fileName) {
 
     if(fileLen % PAGE_SIZE != 0) {
         printf("DB file is not a whole number of pages. Corrupt file!\n");
+        logOutput("output.txt", "a", "DB file is not a whole number of pages. Corrupt file!\n");
         exit(EXIT_FAILURE);
     }
 
@@ -36,6 +39,7 @@ PAGER *openPager(const char *fileName) {
 void *getPage(PAGER *pager, uint32_t pageNum) {
     if(pageNum > TABLE_MAX_PAGES) {
         printf("Tried to fetch page num out of bounds. %d > %d\n", pageNum, TABLE_MAX_PAGES);
+        logOutput("output.txt", "a", "Tried to fetch page num out of bounds. %d > %d\n", pageNum, TABLE_MAX_PAGES);
         exit(EXIT_FAILURE);
     }
 
@@ -53,6 +57,7 @@ void *getPage(PAGER *pager, uint32_t pageNum) {
 
             if(bytesToRead == -1) {
                 printf("Error reading file: %d\n", errno);
+                logOutput("output.txt", "a", "Error reading file: %d\n", errno);
             }
         }
 
@@ -69,6 +74,7 @@ void *getPage(PAGER *pager, uint32_t pageNum) {
 void flushPager(PAGER *pager, uint32_t pageNum) {
     if(pager->pages[pageNum] == NULL) {
         printf("Tried to flush NULL page.\n");
+        logOutput("output.txt", "a", "Tried to flush NULL page.\n");
         exit(EXIT_FAILURE);
     }
 
@@ -76,6 +82,7 @@ void flushPager(PAGER *pager, uint32_t pageNum) {
 
     if(offset == -1) {
         printf("Error seeking: %d\n", errno);
+        logOutput("output.txt", "a", "Error seeking: %d\n", errno);
         exit(EXIT_FAILURE);
     }
 
@@ -83,6 +90,7 @@ void flushPager(PAGER *pager, uint32_t pageNum) {
 
     if(bytesWritten == -1) {
         printf("Error writing: %d\n", errno);
+        logOutput("output.txt", "a", "Error writing: %d\n", errno);
         exit(EXIT_FAILURE);
     }
 }

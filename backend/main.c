@@ -84,6 +84,7 @@ int main(int argc, char **argv) {
                 case (META_COMMAND_SUCCESS):
                     continue;
                 case (META_COMMAND_UNRECOGNIZED_COMMAND):
+                    printf("Unrecognized command: '%s'\n", buffer->buffer);
                     logOutput("output.txt", "a", "Unrecognized command: '%s'\n", buffer->buffer);
                     continue;
             }
@@ -94,27 +95,34 @@ int main(int argc, char **argv) {
             case PREPARE_SUCCESS:
                 break;
             case PREPARE_UNRECOGNIZED_STATEMENT:
+                printf("Unrecognized keyword at the start of '%s'\n", buffer->buffer);
                 logOutput("output.txt", "a", "Unrecognized keyword at the start of '%s'\n", buffer->buffer);
                 continue;
             case PREPARE_SYNTAX_ERROR:
+                printf("Syntax error. Could not parse statement '%s'\n", buffer->buffer);
                 logOutput("output.txt", "a", "Syntax error. Could not parse statement '%s'\n", buffer->buffer);
                 continue;
             case PREPARE_STRING_TOO_LONG:
+                printf("String is too long.\n");
                 logOutput("output.txt", "a", "String is too long.\n");
                 continue;
             case PREPARE_NEGATIVE_ID:
+                printf("ID must be a positive integer.\n");
                 logOutput("output.txt", "a", "ID must be a positive integer.\n");
                 continue;
         }
 
         switch(executeStatement(&statement, table)) {
             case EXECUTE_SUCCESS:
+                printf("Executed!\n");
                 logOutput("output.txt", "a", "Executed!\n");
                 break;
             case EXECUTE_TABLE_FULL:
+                printf("Error: Table is full.\n");
                 logOutput("output.txt", "a", "Error: Table is full.\n");
                 break;
             case EXECUTE_DUPLICATE_KEY:
+                printf("Error: Duplicate keys.\n");
                 logOutput("output.txt", "a", "Error: Duplicate keys.\n");
                 break;
         }

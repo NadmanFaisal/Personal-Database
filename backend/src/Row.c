@@ -1,4 +1,5 @@
 #include "Row.h"
+#include "Logger.h"
 
 void serialize_row(ROW *row, void *destination) {
     memcpy(destination + ID_OFFSET, &(row->id), ID_SIZE);
@@ -13,5 +14,5 @@ void deserialize_row(void *source, ROW *destination) {
 }
 
 void printRow(ROW *row) {
-    printf("(%d, %s, %s)\n", row->id, row->username, row->email);
+    logOutput("output.txt", "a", "(%d, %s, %s)\n", row->id, row->username, row->email);
 }

@@ -1,5 +1,6 @@
 #include "Node.h"
 #include "Cursor.h"
+#include "Logger.h"
 
 uint32_t *leafNodeNumCells(void *node) {
     return node + LEAF_NODE_NUM_CELLS_OFFSET;
@@ -198,11 +199,13 @@ uint32_t *internalNodeChild(void *node, uint32_t childNum) {
     uint32_t numKeys = *internalNodeNumKeys(node);
     if(childNum > numKeys) {
         printf("Tried to access childNum %d > numKeys %d\n", childNum, numKeys);
+        logOutput("output.txt", "a", "Tried to access childNum %d > numKeys %d\n", childNum, numKeys);
         exit(EXIT_FAILURE);
     } else if(childNum == numKeys) {
         uint32_t *rightChild = internalNodeRightChild(node);
         if(*rightChild == INVALID_PAGE_NUM) {
             printf("Tried to access right child of node, but it was invalid page.\n");
+            logOutput("output.txt", "a", "Tried to access right child of node, but it was invalid page.\n");
             exit(EXIT_FAILURE);
         }
         return rightChild;
@@ -210,6 +213,7 @@ uint32_t *internalNodeChild(void *node, uint32_t childNum) {
         uint32_t *child = internalNodeCell(node, childNum);
         if(*child == INVALID_PAGE_NUM) {
             printf("Tried to access child %d of node, but it was invalid page.\n", childNum);
+            logOutput("output.txt", "a", "Tried to access child %d of node, but it was invalid page.\n", childNum);
             exit(EXIT_FAILURE);
         }
         return child;

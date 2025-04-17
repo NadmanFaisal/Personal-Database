@@ -1,4 +1,5 @@
 #include "InputBuffer.h"
+#include "Logger.h"
 
 
 INPUTBUFFER *createBuffer() {
@@ -21,6 +22,7 @@ void readInput(INPUTBUFFER *node) {
     
     if(string == NULL) {
         printf("Error reading input\n");
+        logOutput("output.txt", "a", "Error reading input\n");
         exit(1);
     }
 
