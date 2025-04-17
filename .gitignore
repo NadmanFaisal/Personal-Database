@@ -5,6 +5,8 @@ mydb.db
 commands.txt
 output.txt
 command.txt
+package.json
+package-lock.json
 
 # Logs
 logs

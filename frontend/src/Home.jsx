@@ -27,13 +27,6 @@ function Screen() {
             setOutput(outputText => [...outputText, inputText])
 
             try {
-                // if(inputText.includes('insert')) {
-                //     const response = await insertRequest(inputText)
-                //     setOutput(outputText => [...outputText, response])
-                // } else {
-                //     const response = await selectRequest(inputText)
-                //     setOutput(outputText => [...outputText, response])
-                // }
                 const response = await insertRequest(inputText)
                 setOutput(outputText => [...outputText, response])
             } catch(error) {
