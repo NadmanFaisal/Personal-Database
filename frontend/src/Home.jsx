@@ -1,5 +1,5 @@
 import './Home.css'
-import { insertRequest, selectRequest } from './api/api.js'
+import { insertRequest } from './api/api.js'
 import { useState } from 'react'
 
 export default function CommandScreen() {
