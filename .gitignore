@@ -3,6 +3,8 @@ mydb
 mydb.db
 .vscode/
 commands.txt
+output.txt
+command.txt
 
 # Logs
 logs

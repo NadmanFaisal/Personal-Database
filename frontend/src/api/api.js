@@ -9,6 +9,7 @@ export async function insertRequest(requestBody) {
     try {
         const response = await fetch(BASE_URL + '/POST', request)
         const text = await response.text()
+        console.log(text)
         return text
     } catch(error) {
         throw new Error(error.message)
