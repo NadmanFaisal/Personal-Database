@@ -18,36 +18,6 @@ void printPrompt(void) {
     printf("db > ");
 }
 
-void readInputFromFile(INPUTBUFFER *node, const char *filename) {
-    FILE *cmdFile = fopen(filename, "r");
-    if (!cmdFile) {
-        printf("Command file not found\n");
-        return;
-    }
-
-    memset(node->buffer, 0, MAX_CHARS);
-    node->inputLength = 0;
-
-    size_t bytesRead = fread(node->buffer, 1, MAX_CHARS - 1, cmdFile);
-    fclose(cmdFile);
-    remove(filename);
-    
-    if (bytesRead == 0) {
-        node->buffer[0] = '\0';
-        node->inputLength = 0;
-        return;
-    }
-    
-    node->buffer[bytesRead] = '\0';
-    node->inputLength = strlen(node->buffer);
-    
-    while (node->inputLength > 0 &&
-          (node->buffer[node->inputLength - 1] == '\n' ||
-           node->buffer[node->inputLength - 1] == '\r')) {
-        node->buffer[--node->inputLength] = '\0';
-    }
-}
-
 int main(int argc, char **argv) {
 
     if(argc < 2) {
