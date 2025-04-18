@@ -11,7 +11,7 @@ struct Server {
     int service;
     int protocol;
     int backlog;
-    __u_long interface;
+    unsigned long interface;
 
     int socket;
     struct sockaddr_in addr;
