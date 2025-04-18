@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Make sure the executable is built
-gcc main.c src/*.c -IHeaders -o mydb
+gcc main.c src/*.c -IHeaders -o exec/mydb
+
+# gcc main.c src/*.c -IHeaders -o exec/mydb && ./exec/mydb exec/mydb.db
 
 # Create a temp script file for feeding input to the database
 SCRIPT_FILE="commands.txt"
