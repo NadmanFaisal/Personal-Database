@@ -1,4 +1,14 @@
 #include <signal.h>
+
+#ifndef _WIN32
+#include <sys/wait.h>
+#define sleep_ms(ms) usleep((ms) * 1000)
+#else
+#include <windows.h>
+#include <winsock2.h>
+#pragma comment(lib, "Ws2_32.lib")
+#endif
+
 #include "MetaCommand.h"
 #include "Logger.h"
 
@@ -70,15 +80,23 @@ MetaCommandResult doMetaCommand(INPUTBUFFER *node, TABLE *table) {
     if(strcmp(node->buffer, ".exit") == 0) {
         printf("Shutting down database...\n");
         logOutput("CommsFiles/output.txt", "a", "Shutting down database...\n");
-        
+
         closeDB(table);
 
-        usleep(300000);
+        sleep_ms(300);
         remove("CommsFiles/command.txt");
         remove("CommsFiles/output.txt");
-        
-        kill(server_pid, SIGTERM);
-        exit(0);
+
+        #ifdef _WIN32
+                WSACleanup();
+                ExitProcess(0);
+        #else
+                if (server_pid != -1) {
+                    kill(server_pid, SIGTERM);
+                    waitpid(server_pid, NULL, 0);
+                }
+                exit(0);
+        #endif
     } else if(strcmp(node->buffer, ".constants") == 0) {
         printf("Constants:\n");
         logOutput("CommsFiles/output.txt", "a", "Constants:\n");

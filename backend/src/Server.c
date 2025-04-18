@@ -2,12 +2,34 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#define READ(s, b, l) recv(s, b, l, 0)
+#define WRITE(s, b, l) send(s, b, l, 0)
+#define sleep_ms(ms) Sleep(ms)
+#else
+#include <unistd.h>
+#define READ(s, b, l) read(s, b, l)
+#define WRITE(s, b, l) write(s, b, l)
+#define sleep_ms(ms) usleep((ms) * 1000)
+#endif
+
 #include "Server.h"
 #include "Logger.h"
 #include "InputBuffer.h"
 
 struct Server serverConstructor(int domain, int port, int service, int protocol, int backlog, __u_long interface, void (*launch)(struct Server *server)) {
     struct Server server;
+
+#ifdef _WIN32
+    WSADATA wsaData;
+    int wsaInit = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    if (wsaInit != 0) {
+        fprintf(stderr, "WSAStartup failed: %d\n", wsaInit);
+        exit(EXIT_FAILURE);
+    }
+#endif
 
     server.domain = domain;
     server.service = service;
@@ -45,7 +67,7 @@ void launch(struct Server *server) {
         printf("=== WAITING FOR CONNECTION === \n");
         int addrlen = sizeof(server->addr);
         int new_socket = accept(server->socket, (struct sockaddr*)&server->addr, (socklen_t*)&addrlen);
-        ssize_t bytesRead = read(new_socket, buffer, BUFFER_SIZE - 1);
+        ssize_t bytesRead = READ(new_socket, buffer, BUFFER_SIZE - 1);
         
         if (bytesRead >= 0) {
             buffer[bytesRead] = '\0';
@@ -58,7 +80,7 @@ void launch(struct Server *server) {
         if (body) {
             body += 4;
             logOutput("CommsFiles/command.txt", "w", "%s\n", body);
-            usleep(300000);
+            sleep_ms(300);
         }
 
         const char *header = "HTTP/1.1 200 OK\r\n"
@@ -66,11 +88,11 @@ void launch(struct Server *server) {
                              "Access-Control-Allow-Origin: *\r\n"
                              "Connection: close\r\n"
                              "\r\n";
-        write(new_socket, header, strlen(header));
+        WRITE(new_socket, header, strlen(header));
 
         INPUTBUFFER *logBuffer = createBuffer();
         readInputFromFile(logBuffer, "CommsFiles/output.txt");
-        write(new_socket, logBuffer->buffer, logBuffer->inputLength);
+        WRITE(new_socket, logBuffer->buffer, logBuffer->inputLength);
         free(logBuffer->buffer);
         free(logBuffer);
 
