@@ -33,7 +33,7 @@ void closeDB(TABLE *table) {
     int result = close(pager->fileDesc);
     if(result == -1) {
         printf("Error closing DB file.\n");
-        logOutput("output.txt", "a", "Error closing DB file.\n");
+        logOutput("CommsFiles/output.txt", "a", "Error closing DB file.\n");
         exit(EXIT_FAILURE);
     }
 

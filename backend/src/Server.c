@@ -57,7 +57,7 @@ void launch(struct Server *server) {
         char *body = strstr(buffer, "\r\n\r\n");
         if (body) {
             body += 4;
-            logOutput("command.txt", "w", "%s\n", body);
+            logOutput("CommsFiles/command.txt", "w", "%s\n", body);
             usleep(300000);
         }
 
@@ -69,7 +69,7 @@ void launch(struct Server *server) {
         write(new_socket, header, strlen(header));
 
         INPUTBUFFER *logBuffer = createBuffer();
-        readInputFromFile(logBuffer, "output.txt");
+        readInputFromFile(logBuffer, "CommsFiles/output.txt");
         write(new_socket, logBuffer->buffer, logBuffer->inputLength);
         free(logBuffer->buffer);
         free(logBuffer);

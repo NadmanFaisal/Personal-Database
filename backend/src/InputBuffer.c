@@ -22,7 +22,7 @@ void readInput(INPUTBUFFER *node) {
     
     if(string == NULL) {
         printf("Error reading input\n");
-        logOutput("output.txt", "a", "Error reading input\n");
+        logOutput("CommsFiles/output.txt", "a", "Error reading input\n");
         exit(1);
     }
 

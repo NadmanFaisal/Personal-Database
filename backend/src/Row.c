@@ -15,5 +15,5 @@ void deserialize_row(void *source, ROW *destination) {
 
 void printRow(ROW *row) {
     printf("(%d, %s, %s)\n", row->id, row->username, row->email);
-    logOutput("output.txt", "a", "(%d, %s, %s)\n", row->id, row->username, row->email);
+    logOutput("CommsFiles/output.txt", "a", "(%d, %s, %s)\n", row->id, row->username, row->email);
 }
