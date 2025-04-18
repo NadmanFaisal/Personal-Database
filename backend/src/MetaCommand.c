@@ -70,9 +70,13 @@ MetaCommandResult doMetaCommand(INPUTBUFFER *node, TABLE *table) {
     if(strcmp(node->buffer, ".exit") == 0) {
         printf("Shutting down database...\n");
         logOutput("output.txt", "a", "Shutting down database...\n");
+        
         closeDB(table);
+
+        usleep(300000);
         remove("command.txt");
         remove("output.txt");
+        
         kill(server_pid, SIGTERM);
         exit(0);
     } else if(strcmp(node->buffer, ".constants") == 0) {
